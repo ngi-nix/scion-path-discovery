@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1629379628,
+        "narHash": "sha256-dI8wpEo7wIVWoTUk2oyWFUnlVHNKLs+ren1TqITN1mI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a1007637cea374bd1bafd754cfd5388894c49129",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-21.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "scion-src": "scion-src"
+      }
+    },
+    "scion-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1625831878,
+        "narHash": "sha256-azsOfgg3idVy3T9/C+N1vMUEYuvFMxmFMhzHLp7zjCY=",
+        "owner": "netsys-lab",
+        "repo": "scion-path-discovery",
+        "rev": "e78064bbf590fb7ef21c24f0778ec38ef68cb007",
+        "type": "github"
+      },
+      "original": {
+        "owner": "netsys-lab",
+        "repo": "scion-path-discovery",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
