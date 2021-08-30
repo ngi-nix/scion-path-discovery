@@ -3,14 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-21.05";
-    scion-src = {
+    scionSrc = {
       url = "github:netsys-lab/scion-path-discovery";
       flake = false;
     };
   };
 
 
-  outputs = { self, nixpkgs, scion-src, ... }:
+  outputs = { self, nixpkgs, scionSrc, ... }:
     let
       supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
@@ -27,37 +27,11 @@
 
       overlay = super: self: {
 
-        simple-example = super.buildGoModule rec {
-          pname = "scion-simple-example";
-          version = "0.1.0";
-          src = "${scion-src}";
-          subPackages = [
-            "examples/simple/simple.go"
-          ];
-
+        simple-example = with super; callPackage ./buildExample.nix {
+          inherit buildGoModule scionSrc;
+          pname = "simple";
+          exampleSrc = "examples/simple/simple.go";
           vendorSha256 = "gWJWa6zNW5FnhqT4wTe0c28mmaHXM+dTUT4PLOMC1nA=";
-          # postConfigure = ''
-          #   [ -e "$TMPDIR" ] && ls -alh $TMPDIR
-          #   [ -e "$GOPATH" ] || export GOPATH="$TMPDIR/go"
-          #   [ -e "$GOBIN" ] || export GOBIN="$GOPATH/bin"
-          #   echo "$GOPATH" "$GOBIN"
-          #   mkdir -p "$GOBIN"
-          # '';
-          # installPhase = ''
-          #   runHook preInstall
-
-          #   mkdir -p $out
-          #   dir="$GOPATH/bin"
-          #   [ -e "$dir" ] && cp -r $dir $out
-
-          #   runHook postInstall
-          # '';
-          # postInstall = ''
-          #   ls -alh /build/go/bin
-          #   exit 1
-          # '';
-
-          nativeBuildInputs = with super; [ ];
         };
 
       };
