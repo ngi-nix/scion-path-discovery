@@ -20,11 +20,17 @@
 
   in {
     overlays.default = final: prev: {
-      simple-example = with prev; callPackage ./buildExample.nix {
-        inherit buildGoModule scionSrc;
+      simple-example = with prev; buildGoModule {
         pname = "simple";
-        exampleSrc = "examples/simple/simple.go";
+        version = "0.1.0";
+        src = scionSrc;
         vendorSha256 = "gWJWa6zNW5FnhqT4wTe0c28mmaHXM+dTUT4PLOMC1nA=";
+        buildPhase = ''
+          go build 'examples/simple/simple.go'
+
+          mkdir -p $out/bin
+          cp simple $out/bin
+        '';
       };
     };
 
