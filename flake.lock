@@ -2,11 +2,11 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1629379628,
-        "narHash": "sha256-dI8wpEo7wIVWoTUk2oyWFUnlVHNKLs+ren1TqITN1mI=",
+        "lastModified": 1659914493,
+        "narHash": "sha256-lkA5X3VNMKirvA+SUzvEhfA7XquWLci+CGi505YFAIs=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a1007637cea374bd1bafd754cfd5388894c49129",
+        "rev": "022caabb5f2265ad4006c1fa5b1ebe69fb0c3faf",
         "type": "github"
       },
       "original": {
@@ -25,15 +25,16 @@
     "scionSrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1625831878,
-        "narHash": "sha256-azsOfgg3idVy3T9/C+N1vMUEYuvFMxmFMhzHLp7zjCY=",
+        "lastModified": 1647926800,
+        "narHash": "sha256-QyxAlXAJd1GWxPLUztj6DeC36ST7OROPjZhKZd2jc6Q=",
         "owner": "netsys-lab",
         "repo": "scion-path-discovery",
-        "rev": "e78064bbf590fb7ef21c24f0778ec38ef68cb007",
+        "rev": "ead496edb5a1d7a9ac8d42182a77e224d8f7c20a",
         "type": "github"
       },
       "original": {
         "owner": "netsys-lab",
+        "ref": "v1.0.1",
         "repo": "scion-path-discovery",
         "type": "github"
       }

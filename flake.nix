@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-21.05";
     scionSrc = {
-      url = "github:netsys-lab/scion-path-discovery";
+      url = "github:netsys-lab/scion-path-discovery/v1.0.1";
       flake = false;
     };
   };
@@ -20,29 +20,38 @@
 
   in {
     overlays.default = final: prev: {
-      simple-example = with prev; buildGoModule {
-        pname = "simple";
-        version = "0.1.0";
+      scion-path-discovery-examples = with prev; buildGoModule {
+        pname = "scion-path-discovery-examples";
+        version = "1.0.1";
         src = scionSrc;
-        vendorSha256 = "gWJWa6zNW5FnhqT4wTe0c28mmaHXM+dTUT4PLOMC1nA=";
+        vendorSha256 = "sha256-4XUojpI7VCIvGBTpp96SGP5Du48W6Zgrj8qkPFXPZrk=";
         buildPhase = ''
-          go build 'examples/simple/simple.go'
-
           mkdir -p $out/bin
-          cp simple $out/bin
+
+          go build 'examples/simple/main.go'
+          cp main $out/bin/simple
+
+          go build 'examples/mppingpong/main.go'
+          cp main $out/bin/mppingpong
         '';
       };
     };
 
     packages = forAllSystems (system: rec {
-      inherit (nixpkgsFor.${system}) simple-example;
-      default = simple-example;
+      inherit (nixpkgsFor.${system}) scion-path-discovery-examples;
+      default = scion-path-discovery-examples;
     });
 
-    apps = forAllSystems (system: {
-      simple-example = {
+    apps = forAllSystems (system: let
+      pkg = self.packages.${system}.scion-path-discovery-examples;
+    in {
+      example-simple = {
         type = "app";
-        program = "${self.packages.${system}.simple-example}/bin/simple";
+        program = "${pkg}/bin/simple";
+      };
+      example-mppingpong = {
+        type = "app";
+        program = "${pkg}/bin/mppingpong";
       };
     });
   };
