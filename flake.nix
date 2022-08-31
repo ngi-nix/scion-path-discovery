@@ -18,16 +18,16 @@
       nixpkgsFor = forAllSystems (system:
         import nixpkgs {
           inherit system;
-          overlays = [ self.overlay ];
+          overlays = [ self.overlays.default ];
         }
       );
 
     in
     {
 
-      overlay = super: self: {
+      overlays.default = final: prev: {
 
-        simple-example = with super; callPackage ./buildExample.nix {
+        simple-example = with prev; callPackage ./buildExample.nix {
           inherit buildGoModule scionSrc;
           pname = "simple";
           exampleSrc = "examples/simple/simple.go";
@@ -36,15 +36,16 @@
 
       };
 
-      packages = forAllSystems (system: {
+      packages = forAllSystems (system: rec {
         inherit (nixpkgsFor.${system}) simple-example;
+        default = simple-example;
       });
 
       apps = forAllSystems (system:
         let
           simple-example = (import nixpkgs {
             inherit system;
-            overlays = [ self.overlay ];
+            overlays = [ self.overlays.default ];
           }).simple-example;
         in
         {
@@ -54,10 +55,6 @@
           };
         }
       );
-
-
-      defaultPackage =
-        forAllSystems (system: self.packages.${system}.simple-example);
 
     };
 
