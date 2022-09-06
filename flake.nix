@@ -2,7 +2,7 @@
   description = "Scion Path Discovery";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/22.05";
     src = {
       url = "github:netsys-lab/scion-path-discovery/v1.0.1";
       flake = false;
@@ -19,7 +19,9 @@
     nixpkgsFor = forAllSystems (system:
       import nixpkgs {
         inherit system;
-        overlays = [self.overlays.default];
+        overlays = [
+          self.overlays.default
+        ];
       });
   in {
     overlays.default = final: prev: {
@@ -27,10 +29,10 @@
         buildGoModule {
           pname = "scion-path-discovery-examples";
           version = "1.0.1";
-
-          src = src;
+          inherit src;
           vendorSha256 = "sha256-4XUojpI7VCIvGBTpp96SGP5Du48W6Zgrj8qkPFXPZrk=";
 
+          CGO_ENABLED = 0;
           buildPhase = ''
             make
           '';
@@ -48,6 +50,9 @@
     apps = forAllSystems (system: let
       pkgs = nixpkgsFor.${system};
       pkg = self.packages.${system}.scion-path-discovery-examples;
+      update = pkgs.callPackage ./update.nix {
+        inherit src;
+      };
     in {
       example-simple = {
         type = "app";
