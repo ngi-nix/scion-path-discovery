@@ -2,14 +2,14 @@
   description = "Scion Path Discovery";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.05";
-    scionSrc = {
+    nixpkgs.url = "github:NixOS/nixpkgs/release-21.05";
+    src = {
       url = "github:netsys-lab/scion-path-discovery/v1.0.1";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, scionSrc, ... }: let
+  outputs = { self, nixpkgs, src }: let
     supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
     forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
 
@@ -23,16 +23,15 @@
       scion-path-discovery-examples = with prev; buildGoModule {
         pname = "scion-path-discovery-examples";
         version = "1.0.1";
-        src = scionSrc;
+
+        src = src;
         vendorSha256 = "sha256-4XUojpI7VCIvGBTpp96SGP5Du48W6Zgrj8qkPFXPZrk=";
+
         buildPhase = ''
-          mkdir -p $out/bin
-
-          go build 'examples/simple/main.go'
-          cp main $out/bin/simple
-
-          go build 'examples/mppingpong/main.go'
-          cp main $out/bin/mppingpong
+          make
+        '';
+        postInstall = ''
+          cp -r bin $out
         '';
       };
     };
