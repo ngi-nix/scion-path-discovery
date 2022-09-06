@@ -48,11 +48,7 @@
     });
 
     apps = forAllSystems (system: let
-      pkgs = nixpkgsFor.${system};
       pkg = self.packages.${system}.scion-path-discovery-examples;
-      update = pkgs.callPackage ./update.nix {
-        inherit src;
-      };
     in {
       example-simple = {
         type = "app";
@@ -62,10 +58,8 @@
         type = "app";
         program = "${pkg}/bin/mppingpong";
       };
-      format = {
-        type = "app";
-        program = "${pkgs.alejandra}/bin/alejandra";
-      };
     });
+
+    formatter = forAllSystems (system: nixpkgsFor.${system}.alejandra);
   };
 }
